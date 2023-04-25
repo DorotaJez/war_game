@@ -26,6 +26,7 @@ class PlayerCards:
         self.cards = cards
 
     def withdraw(self):
+        self.cards = self.cards[1:]
         return self.cards[0]
 
     def add_cards(self, cards_to_add):
@@ -63,8 +64,8 @@ class Table:
         self.current_state = {"P1": [], "P2": []}
 
 
-class Game:
-        
+class Game:    
+
     def normal_game(self, table,p1,p2): # create a separate class for normal_game, war_scenario and end_game?
         while True:
             if len(p1.cards) <= 0:
@@ -84,8 +85,24 @@ class Game:
             else:
                 self.war_scenario(table,p1,p2)
 
-    def war_scenario(table,p1,p2):
-        pass
+    def war_scenario(self,table,p1,p2):
+        while True:
+            print("Press enter to put a card facing down...")
+            if input() != None:
+                card_a_face_down = p1.withdraw()
+                card_b_face_down = p2.withdraw()
+                table.add_to_table(card_a_face_down, card_b_face_down)    
+            print("Press enter again to put a card facing up...")
+            if input() != None:
+                card_a_face_up = p1.withdraw()
+                card_b_face_up = p2.withdraw()
+                table.add_to_table(card_a_face_up, card_b_face_up)
+            if table.compare() == "card a":
+                p1.add_cards(table.all_cards)
+            elif table.compare() == "card b":
+                p2.add_cards(table.all_cards)
+            else:
+                self.war_scenario(table,p1,p2)                                   
 
     def end_game(winner=None):
         if winner != None:
