@@ -3,7 +3,7 @@ import sys
 
 class Deck:
     '''represents an entire 52-cards deck'''
-    global card_ranks # here or somewhere else?
+    global card_ranks
     card_ranks = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"]
     card_suits = ["♠", "♥", "♦", "♣"]
 
@@ -11,7 +11,8 @@ class Deck:
         self.cards = [rank+" "+suit for rank in card_ranks for suit in card_suits]
 
     def shuffle(self):
-        return random.shuffle(self.cards)  
+        random.shuffle(self.cards)
+        return self.cards  
     
     def split(self):
         p1 = PlayerCards(self.cards[:26])
@@ -21,7 +22,6 @@ class Deck:
 
 class PlayerCards:
     '''all of the cards for an individual user'''
-    # no inheritance - add that to readme etc.
     def __init__(self, cards):
         self.cards = cards
 
@@ -65,14 +65,13 @@ class Table:
 
 
 class Game:    
-
-    def normal_game(self, table,p1,p2): # create a separate class for normal_game, war_scenario and end_game?
+    def normal_game(self, table,p1,p2):
         while True:
             if len(p1.cards) <= 0:
                 self.end_game(p2)
             if len(p2.cards) <= 0:
                 self.end_game(p1)
-            if input() == "exit": # the player can type anything else and continue playing - iclude that in the description
+            if input() == "exit":
                 self.end_game()
             card_a = p1.withdraw()
             card_b = p2.withdraw()
@@ -86,7 +85,7 @@ class Game:
                 self.war_scenario(table,p1,p2)
 
     def war_scenario(self,table,p1,p2):
-        while True:
+        while len(p1.cards) >=2 and len(p2.cards) >=2:
             print("Press enter to put a card facing down...")
             if input() != None:
                 card_a_face_down = p1.withdraw()
@@ -110,15 +109,14 @@ class Game:
         sys.exit("Thanks for playing!")
 
 def main():
-    # welcome message and rules
+    print("################")
     game = Game()
     deck = Deck()
     table = Table()
     deck.shuffle()
     p1, p2 = deck.split()
     game.normal_game(table,p1,p2)
-
-
+    print("Welcome to the War Game! Press enter to begin")
 
 if __name__ == "__main__":
     main()
