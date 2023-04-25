@@ -1,10 +1,23 @@
 import random
 
 class Deck:
-    # a list of 52 cards
-    # shuffle
-    # split (into two PlayerCards instances)
-    pass
+    '''represents an entire 52-cards deck'''
+    global card_ranks
+    card_ranks = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"]
+    card_suits = ["♠", "♥", "♦", "♣"]
+
+    # keep it in the __init__ or put inside of another method?
+    def __init__(self, card_suits=card_suits, card_ranks=card_ranks):
+        self.cards = [rank+" "+suit for rank in card_ranks for suit in card_suits]
+
+    def shuffle(self):
+        return random.shuffle(self.cards)  
+    
+    def split(self):
+        p1 = PlayerCards(self.cards[:26])
+        p2 = PlayerCards()
+        return p1, p2
+    
 
 class PlayerCards:
     # a list of 26 cards, inherits that attribute from Deck
@@ -15,8 +28,8 @@ class PlayerCards:
     pass
 
 class Table:
-
-    order_dict = dict(zip(["2","3","4","5","6","7","8","9","10","J","Q","K","A"], range(2,15)))
+    '''represents the playing table, contains the cards that are currently on the table and is able to compare their ranks'''
+    order_dict = dict(zip(card_ranks, range(2,15)))
 
     def __init__(self, current_state={"P1": [], "P2": []}):
         self.current_state = current_state
@@ -63,11 +76,11 @@ def normal_game(table,p1,p2):
         table.add_to_table(card_a, card_b)
         print(table)
         if table.compare() == "card a":
-            p1.add_cards(table)
+            p1.add_cards(table.all_cards)
         elif table.compare() == "card b":
-            p2.add_cards(table)
+            p2.add_cards(table.all_cards)
         else:
-            war_scenario()
+            war_scenario(table,p1,p2)
     pass
 
 def war_scenario():
