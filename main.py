@@ -7,7 +7,6 @@ class Deck:
     card_ranks = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"]
     card_suits = ["♠", "♥", "♦", "♣"]
 
-    # keep it in the __init__ or put inside of another method?
     def __init__(self, card_suits=card_suits, card_ranks=card_ranks):
         self.cards = [rank+" "+suit for rank in card_ranks for suit in card_suits]
 
@@ -16,17 +15,22 @@ class Deck:
     
     def split(self):
         p1 = PlayerCards(self.cards[:26])
-        p2 = PlayerCards()
+        p2 = PlayerCards(self.cards[26:])
         return p1, p2
     
 
 class PlayerCards:
-    # a list of 26 cards, inherits that attribute from Deck
-    # but doesn't have to inherit shuffle and split methods
-    # withdraw - 1 card from the top
-    # add_cards - x cards to the bottom
-    # check_if_empty? or just len
-    pass
+    '''all of the cards for an individual user'''
+    # no inheritance - add that to readme etc.
+    def __init__(self, cards):
+        self.cards = cards
+
+    def withdraw(self):
+        return self.cards[0]
+
+    def add_cards(self, cards_to_add):
+        self.cards.append(cards_to_add)
+    
 
 class Table:
     '''represents the playing table, contains the cards that are currently on the table and is able to compare their ranks'''
@@ -71,7 +75,7 @@ def normal_game(table,p1,p2): # create a separate class for normal_game, war_sce
             end_game(p2)
         if len(p2.cards) <= 0:
             end_game(p1)
-        if input() == "exit": # the player can type anything else and continue playing
+        if input() == "exit": # the player can type anything else and continue playing - iclude that in the description
             end_game()
         card_a = p1.withdraw()
         card_b = p2.withdraw()
