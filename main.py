@@ -45,8 +45,8 @@ class Table:
         return f"Player 1: {self.current_state['P1']}, Player 2: {self.current_state['P2']}"
 
     def add_to_table(self, card_a, card_b):
-        self.current_state['P1'].append(card_a)
-        self.current_state['P2'].append(card_b)
+        self.current_state['P1'] = [card_a] + self.current_state['P1']
+        self.current_state['P2'] = [card_b] + self.current_state['P2']
 
     def compare(self):
         card_a = self.current_state['P1'][0]
@@ -67,9 +67,9 @@ class Game:
     def normal_game(self, table,p1,p2):
         while True:
             if len(p1.cards) <= 0:
-                self.end_game(p2)
+                self.end_game("Player 2")
             if len(p2.cards) <= 0:
-                self.end_game(p1)
+                self.end_game("Player 1")
             if input() == "exit":
                 self.end_game()
             card_a = p1.withdraw()
@@ -78,30 +78,50 @@ class Game:
             print(table)
             if table.compare() == "card a":
                 p1.add_cards(table.all_cards)
+                print("Player 1 has won this round")
             elif table.compare() == "card b":
                 p2.add_cards(table.all_cards)
+                print("Player 2 has won this round")
             else:
                 self.war_scenario(table,p1,p2)
             table.clear()
 
     def war_scenario(self,table,p1,p2):
-        while len(p1.cards) >=2 and len(p2.cards) >=2:
+        while True:
+            if len(p1.cards) <= 0:
+                self.end_game("Player 2")
+            if len(p2.cards) <= 0:
+                self.end_game("Player 1")
+            if input() == "exit":
+                self.end_game()  
+
             print("Press enter to put a card facing down...")
+
             if input() != None:
                 card_a_face_down = p1.withdraw()
                 card_b_face_down = p2.withdraw()
-                table.add_to_table(card_a_face_down, card_b_face_down)    
-            print("Press enter again to put a card facing up...")
-            if input() != None:
+                table.add_to_table(card_a_face_down, card_b_face_down) 
+
+            user_input = input("Press enter again to put a card facing up...")
+
+            if user_input != None:
                 card_a_face_up = p1.withdraw()
                 card_b_face_up = p2.withdraw()
                 table.add_to_table(card_a_face_up, card_b_face_up)
-            if table.compare() == "card a":
-                p1.add_cards(table.all_cards)
-            elif table.compare() == "card b":
-                p2.add_cards(table.all_cards)
-            else:
-                self.war_scenario(table,p1,p2)                                   
+                print(table)
+
+                if table.compare() == "card a":
+                    p1.add_cards(table.all_cards)
+                    print("Player 1 has won the war!")
+                    return
+                elif table.compare() == "card b":
+                    p2.add_cards(table.all_cards)
+                    print("Player 2 has won the war!")
+                    return
+                else:
+                    print("The war goes on!")
+                    self.war_scenario(table,p1,p2)    
+                          
 
     def end_game(winner=None):
         if winner != None:
