@@ -3,7 +3,7 @@ import sys
 
 class Deck:
     '''represents an entire 52-cards deck'''
-    global card_ranks
+    global card_ranks # here or somewhere else?
     card_ranks = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"]
     card_suits = ["♠", "♥", "♦", "♣"]
 
@@ -62,39 +62,46 @@ class Table:
     def clear(self):
         self.current_state = {"P1": [], "P2": []}
 
+
+class Game:
+        
+    def normal_game(self, table,p1,p2): # create a separate class for normal_game, war_scenario and end_game?
+        while True:
+            if len(p1.cards) <= 0:
+                self.end_game(p2)
+            if len(p2.cards) <= 0:
+                self.end_game(p1)
+            if input() == "exit": # the player can type anything else and continue playing - iclude that in the description
+                self.end_game()
+            card_a = p1.withdraw()
+            card_b = p2.withdraw()
+            table.add_to_table(card_a, card_b)
+            print(table)
+            if table.compare() == "card a":
+                p1.add_cards(table.all_cards)
+            elif table.compare() == "card b":
+                p2.add_cards(table.all_cards)
+            else:
+                self.war_scenario(table,p1,p2)
+
+    def war_scenario(table,p1,p2):
+        pass
+
+    def end_game(winner=None):
+        if winner != None:
+            print(f"{winner} has won the game!")
+        sys.exit("Thanks for playing!")
+
 def main():
+    # welcome message and rules
+    game = Game()
     deck = Deck()
     table = Table()
     deck.shuffle()
     p1, p2 = deck.split()
-    normal_game(table,p1,p2)
+    game.normal_game(table,p1,p2)
 
-def normal_game(table,p1,p2): # create a separate class for normal_game, war_scenario and end_game?
-    while True:
-        if len(p1.cards) <= 0:
-            end_game(p2)
-        if len(p2.cards) <= 0:
-            end_game(p1)
-        if input() == "exit": # the player can type anything else and continue playing - iclude that in the description
-            end_game()
-        card_a = p1.withdraw()
-        card_b = p2.withdraw()
-        table.add_to_table(card_a, card_b)
-        print(table)
-        if table.compare() == "card a":
-            p1.add_cards(table.all_cards)
-        elif table.compare() == "card b":
-            p2.add_cards(table.all_cards)
-        else:
-            war_scenario(table,p1,p2)
 
-def war_scenario():
-    pass
-
-def end_game(winner=None):
-    if winner != None:
-        print(f"{winner} has won the game!")
-    sys.exit("Thanks for playing!")
 
 if __name__ == "__main__":
     main()
