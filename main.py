@@ -8,7 +8,7 @@ class Deck:
     card_suits = ["♠", "♥", "♦", "♣"]
 
     def __init__(self, card_suits=card_suits, card_ranks=card_ranks):
-        self.cards = [rank+" "+suit for rank in card_ranks for suit in card_suits]
+        self.cards = [rank+suit for rank in card_ranks for suit in card_suits]
 
     def shuffle(self):
         random.shuffle(self.cards)
@@ -116,7 +116,7 @@ def main():
     deck.shuffle()
     p1, p2 = deck.split()
     game.normal_game(table,p1,p2)
-    print("Welcome to the War Game! Press enter to begin")
+    print("Welcome to the War Game! Press enter to begin") # dać to do góry
 
 if __name__ == "__main__":
     main()
