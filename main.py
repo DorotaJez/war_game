@@ -39,29 +39,28 @@ class Table:
 
     def __init__(self, current_state={"P1": [], "P2": []}):
         self.current_state = current_state
-        self.player_one_cards = current_state["P1"]
-        self.player_two_cards = current_state["P2"]
-        self.all_cards = self.player_one_cards + self.player_two_cards
+        self.all_cards = self.current_state['P1'] + self.current_state['P2']
 
     def __str__(self):
-        return f"Player 1: {self.player_one_cards}, Player 2: {self.player_two_cards}"
+        return f"Player 1: {self.current_state['P1']}, Player 2: {self.current_state['P2']}"
 
     def add_to_table(self, card_a, card_b):
-        self.player_one_cards.append(card_a)
-        self.player_two_cards.append(card_b)
+        self.current_state['P1'].append(card_a)
+        self.current_state['P2'].append(card_b)
 
     def compare(self):
-        card_a = self.player_one_cards[0]
-        card_b = self.player_two_cards[0]
+        card_a = self.current_state['P1'][0]
+        card_b = self.current_state['P2'][0]
         if self.order_dict[card_a[:-1]] > self.order_dict[card_b[:-1]]:
             return "card a"
         elif self.order_dict[card_a[:-1]] < self.order_dict[card_b[:-1]]:
             return "card b"
         else:
-            return "tie"        
+            return "tie"
 
     def clear(self):
-        self.current_state = {"P1": [], "P2": []}
+        self.current_state['P1'] = []
+        self.current_state['P2'] = []
 
 
 class Game:    
@@ -83,6 +82,7 @@ class Game:
                 p2.add_cards(table.all_cards)
             else:
                 self.war_scenario(table,p1,p2)
+            table.clear()
 
     def war_scenario(self,table,p1,p2):
         while len(p1.cards) >=2 and len(p2.cards) >=2:
@@ -109,14 +109,13 @@ class Game:
         sys.exit("Thanks for playing!")
 
 def main():
-    print("################")
+    print("Welcome to the War Game! Press enter to begin")
     game = Game()
     deck = Deck()
     table = Table()
     deck.shuffle()
     p1, p2 = deck.split()
     game.normal_game(table,p1,p2)
-    print("Welcome to the War Game! Press enter to begin") # dać to do góry
 
 if __name__ == "__main__":
     main()
