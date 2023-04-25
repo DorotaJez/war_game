@@ -64,13 +64,14 @@ def main():
     p1, p2 = deck.split()
     normal_game(table,p1,p2)
 
-def normal_game(table,p1,p2):
+def normal_game(table,p1,p2): # create a separate class for normal_game, war_scenario and end_game?
     while True:
-        if len(p1.cards) <= 0 or len(p2.cards) <= 0:
-            break
-        # do you want to exit? message
-        # if not
-        # enter
+        if len(p1.cards) <= 0:
+            end_game(p2)
+        if len(p2.cards) <= 0:
+            end_game(p1)
+        if input() == "exit": # the player can type anything else and continue playing
+            end_game()
         card_a = p1.withdraw()
         card_b = p2.withdraw()
         table.add_to_table(card_a, card_b)
@@ -81,9 +82,11 @@ def normal_game(table,p1,p2):
             p2.add_cards(table.all_cards)
         else:
             war_scenario(table,p1,p2)
-    pass
 
 def war_scenario():
+    pass
+
+def end_game(winner=None):
     pass
 
 if __name__ == "__main__":
