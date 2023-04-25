@@ -1,4 +1,5 @@
 import random
+import sys
 
 class Deck:
     '''represents an entire 52-cards deck'''
@@ -87,7 +88,9 @@ def war_scenario():
     pass
 
 def end_game(winner=None):
-    pass
+    if winner != None:
+        print(f"{winner} has won the game!")
+    sys.exit("Thanks for playing!")
 
 if __name__ == "__main__":
     main()
