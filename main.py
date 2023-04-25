@@ -30,7 +30,7 @@ class PlayerCards:
         return self.cards[0]
 
     def add_cards(self, cards_to_add):
-        self.cards.append(cards_to_add)
+        self.cards += cards_to_add
     
 
 class Table:
@@ -39,7 +39,6 @@ class Table:
 
     def __init__(self, current_state={"P1": [], "P2": []}):
         self.current_state = current_state
-        self.all_cards = self.current_state['P1'] + self.current_state['P2']
 
     def __str__(self):
         return f"Player 1: {self.current_state['P1']}, Player 2: {self.current_state['P2']}"
@@ -77,14 +76,15 @@ class Game:
             table.add_to_table(card_a, card_b)
             print(table)
             if table.compare() == "card a":
-                p1.add_cards(table.all_cards)
-                print("Player 1 has won this round")
+                p1.add_cards(table.current_state["P1"] + table.current_state["P2"])
+                print(f"Player 1 has won this round. They now have {len(p1.cards)} cards")
             elif table.compare() == "card b":
-                p2.add_cards(table.all_cards)
-                print("Player 2 has won this round")
+                p2.add_cards(table.current_state["P1"] + table.current_state["P2"])
+                print(f"Player 2 has won this round. They now have {len(p1.cards)} cards")
             else:
                 self.war_scenario(table,p1,p2)
             table.clear()
+
 
     def war_scenario(self,table,p1,p2):
         while True:
@@ -111,11 +111,11 @@ class Game:
                 print(table)
 
                 if table.compare() == "card a":
-                    p1.add_cards(table.all_cards)
+                    p1.add_cards(table.current_state["P1"] + table.current_state["P2"])
                     print("Player 1 has won the war!")
                     return
                 elif table.compare() == "card b":
-                    p2.add_cards(table.all_cards)
+                    p2.add_cards(table.current_state["P1"] + table.current_state["P2"])
                     print("Player 2 has won the war!")
                     return
                 else:
@@ -123,7 +123,7 @@ class Game:
                     self.war_scenario(table,p1,p2)    
                           
 
-    def end_game(winner=None):
+    def end_game(self, winner=None):
         if winner != None:
             print(f"{winner} has won the game!")
         sys.exit("Thanks for playing!")
