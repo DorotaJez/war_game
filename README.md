@@ -14,7 +14,7 @@ For the sake of simplicity, we will call the two players P1 (user) and P2 (compu
 The goal of the game is to take posession of all the cards of the opponent.
 The steps of the game are as follows:
 1. At the beginning the deck is randomly and equally split between P1 and P2.
-2. P1 presses "enter" to play the first card from their deck (which is a queue structure).
+2. P1 presses "enter" (or anything other than "exit" followed by an enter) to play the first card from their deck (which is a queue structure). If exit + enter is pressed, the game terminates.
 3. At the same time, P2 also pulls out the first card.
 4. Both cards appear on the screen and are compared (just by their value: the suits don't matter). The player with the greater value takes both of the cards and puts them on the end of their deck.
 5. In case the two cards have the same value, the players "go to war":
